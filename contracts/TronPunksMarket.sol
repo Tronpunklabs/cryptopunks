@@ -1,12 +1,16 @@
+/**
+ *Submitted for verification at TronScan.org on 2021-03-11
+*/
+
 pragma solidity ^0.4.8;
-contract CryptoPunksMarket {
+contract TronPunksMarket {
 
     // You can use this hash to verify the image file containing all the punks
     string public imageHash = "ac39af4793119ee46bbff351d8cb6b5f23da60222126add4268e261199a2921b";
 
-    address owner;
+    address public owner;
 
-    string public standard = 'CryptoPunks';
+    string public standard = 'TronPunks';
     string public name;
     string public symbol;
     uint8 public decimals;
@@ -16,6 +20,8 @@ contract CryptoPunksMarket {
 
     bool public allPunksAssigned = false;
     uint public punksRemainingToAssign = 0;
+    
+    uint256 public claimPrice = 5000 ether;
 
     //mapping (address => uint) public addressToPunkIndex;
     mapping (uint => address) public punkIndexToAddress;
@@ -56,14 +62,14 @@ contract CryptoPunksMarket {
     event PunkNoLongerForSale(uint indexed punkIndex);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
-    function CryptoPunksMarket() payable {
+    function TronPunksMarket() payable {
         //        balanceOf[msg.sender] = initialSupply;              // Give the creator all initial tokens
         owner = msg.sender;
         totalSupply = 10000;                        // Update total supply
         punksRemainingToAssign = totalSupply;
-        name = "CRYPTOPUNKS";                                   // Set the name for display purposes
-        symbol = "Ͼ";                               // Set the symbol for display purposes
-        decimals = 0;                                       // Amount of decimals for display purposes
+        name = "TRONPUNKS";                          // Set the name for display purposes
+        symbol = "τ";                               // Set the symbol for display purposes
+        decimals = 0;                               // Amount of decimals for display purposes
     }
 
     function setInitialOwner(address to, uint punkIndex) {
@@ -95,15 +101,33 @@ contract CryptoPunksMarket {
         allPunksAssigned = true;
     }
 
-    function getPunk(uint punkIndex) {
+    function getPunk() payable {
+        uint256 punkIndex = nextPunkIndexToAssign;
+        if (punkIndex == 8146 || 
+            punkIndex == 3107 || 
+            punkIndex == 455 || 
+            punkIndex == 588 || 
+            punkIndex == 1190 || 
+            punkIndex == 4513 || 
+            punkIndex == 4924 || 
+            punkIndex == 4936 || 
+            punkIndex == 5217 || 
+            punkIndex == 7804 || 
+            punkIndex == 8664 || 
+            punkIndex == 9316) {
+            punkIndex++;
+        }
         if (!allPunksAssigned) throw;
         if (punksRemainingToAssign == 0) throw;
         if (punkIndexToAddress[punkIndex] != 0x0) throw;
         if (punkIndex >= 10000) throw;
+        if (msg.value != claimPrice) throw;      // Didn't send enough BNB
         punkIndexToAddress[punkIndex] = msg.sender;
         balanceOf[msg.sender]++;
         punksRemainingToAssign--;
         Assign(msg.sender, punkIndex);
+        owner.transfer(msg.value);
+        nextPunkIndexToAssign = punkIndex + 1;
     }
 
     // Transfer ownership of a punk to another user without requiring payment
