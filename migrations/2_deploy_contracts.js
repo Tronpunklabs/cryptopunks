@@ -1,10 +1,10 @@
 var ConvertLib = artifacts.require("./ConvertLib.sol");
-var CryptoPunks = artifacts.require("./CryptoPunks.sol");
-var CryptoPunksMarket = artifacts.require("./CryptoPunksMarket.sol");
+var TronPunks = artifacts.require("./TronPunks.sol");
+var TronPunksMarket = artifacts.require("./TronPunksMarket.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(ConvertLib);
-  deployer.link(ConvertLib, CryptoPunks);
-  deployer.deploy(CryptoPunks);
-  deployer.deploy(CryptoPunksMarket);
+  deployer.link(ConvertLib, TronPunks);
+  deployer.deploy(TronPunks);
+  deployer.deploy(TronPunksMarket);
 };
