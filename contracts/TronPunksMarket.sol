@@ -21,7 +21,7 @@ contract TronPunksMarket {
     bool public allPunksAssigned = false;
     uint public punksRemainingToAssign = 0;
     
-    uint256 public claimPrice = 5000 ether;
+    uint256 public claimPrice = 5000 trx;
 
     //mapping (address => uint) public addressToPunkIndex;
     mapping (uint => address) public punkIndexToAddress;
